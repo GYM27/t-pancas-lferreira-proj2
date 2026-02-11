@@ -1,5 +1,7 @@
 package pt.uc.dei.proj2.service;
 
+import jakarta.ws.rs.core.*;
+
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
@@ -11,6 +13,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.uc.dei.proj2.bean.UserBean;
 import pt.uc.dei.proj2.dto.UserDto;
+import pt.uc.dei.proj2.pojo.LoginResponse;
 import pt.uc.dei.proj2.pojo.UserPojo;
 
 import jakarta.inject.Inject;
@@ -19,6 +22,9 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.uc.dei.proj2.bean.UserBean;
 import pt.uc.dei.proj2.pojo.UserPojo;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Path("/users")
 public class UserService {
@@ -30,17 +36,17 @@ public class UserService {
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response login(UserPojo user) {
-        // Chamamos o método que criaste no UserBean
-        boolean isValido = userBean.login(user.getUsername(), user.getPassword());
-
-        if (isValido) {
-            return Response.ok("{\"status\":\"sucesso\"}").build();
-        } else {
-            return Response.status(401).entity("{\"erro\":\"Falhou\"}").build();
-        }
+    public LoginResponse login(UserPojo user) {
+        /*Map<String, Object> json = new HashMap<>();
+        json.put("Hello", "World");
+        return Response.ok(json).build();*/
+        return new LoginResponse(
+                true,
+                "Login successful " + user.getEmail(),
+                123L
+        );
     }
 }
-}
+
 
 
