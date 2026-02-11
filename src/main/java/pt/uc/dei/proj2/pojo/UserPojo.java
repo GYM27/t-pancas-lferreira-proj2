@@ -17,4 +17,6 @@ public class UserPojo {
     private List<ClientesPojo> clientes= new ArrayList<>();
     private List<LeadsPojo> leads= new ArrayList<>();
 
+
+
 }
