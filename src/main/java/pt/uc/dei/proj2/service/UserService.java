@@ -1,30 +1,18 @@
 package pt.uc.dei.proj2.service;
 
 import jakarta.ws.rs.core.*;
-
 import jakarta.inject.Inject;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import pt.uc.dei.proj2.bean.UserBean;
-import pt.uc.dei.proj2.dto.UserDto;
-import pt.uc.dei.proj2.pojo.LoginResponse;
+import pt.uc.dei.proj2.dto.LoginDto;
 import pt.uc.dei.proj2.pojo.UserPojo;
-
-import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import pt.uc.dei.proj2.bean.UserBean;
-import pt.uc.dei.proj2.pojo.UserPojo;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Path("/users")
 public class UserService {
@@ -33,20 +21,33 @@ public class UserService {
     private UserBean userBean; // Isto liga as duas classes automaticamente
 
     @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response register(UserPojo newUser) {
+        boolean success = userBean.register(newUser);
+        if (success) {
+            return Response.status(Response.Status.CREATED).entity("{\"message\":\"User registered\"}").build();
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Username already exists\"}").build();
+        }
+    }
+
+    @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public LoginResponse login(UserPojo user) {
-        /*Map<String, Object> json = new HashMap<>();
-        json.put("Hello", "World");
-        return Response.ok(json).build();*/
-        return new LoginResponse(
-                true,
-                "Login successful " + user.getEmail(),
-                123L
-        );
+    public Response login(LoginDto loginData) {
+        System.out.println("Tentativa de login para: " + loginData.getUsername());
+        boolean success = userBean.login(loginData);
+        if (success) {
+            return Response.ok("{\"message\":\"Login successful\"}").build();
+        } else {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
 }
+
 
 
 
