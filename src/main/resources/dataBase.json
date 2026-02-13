@@ -1,0 +1,19 @@
+user: [{
+  {
+    "username": "ana",
+    "password": "pass123",
+    "email": "ana@mail.pt",
+    "firstName": "Ana",
+    "lastName": "Fernandes",
+    "cellphone": "912345699"
+  },
+
+    {
+    "username": "jose_silva",
+    "password": "password123",
+    "email": "jose@mail.pt",
+    "firstName": "José",
+    "lastName": "Silva",
+    "cellphone": "912345678"
+  }
+]

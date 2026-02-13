@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @ApplicationScoped //cria apenas uma instância daquela classe para toda a aplicação enquanto ela estiver a correr
 public class ClientesBean implements Serializable {
 
-    final String filename = "clientes.json";
+    final String filename = "database.json";
     private ArrayList<ClientesDto> clientes;
     private ArrayList<UserPojo> userPojos;
 

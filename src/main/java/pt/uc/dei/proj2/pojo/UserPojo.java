@@ -8,35 +8,81 @@ public class UserPojo {
     private String username;
     private String password;
     private String email;
-    private String primeiro_nome;
-    private String ultimo_nome;
-    private String imagem;
+    private String firstName;
+    private String lastName;
+    private String image;
+    private String cellphone;
 
+    //Inicializar as listas evita NullPointerException
 
-    public UserPojo() {} // important
+    private List<ClientesPojo> clientes = new ArrayList<>();
+    private List<LeadsPojo> leads = new ArrayList<>();
 
-    public void setUsername(String username) { this.username = username; }
-    public void setPassword(String password) { this.password = password; }
-    public void setEmail(String email) { this.email = email; }
-    public void setPrimeiro_nome(String primeiro_nome) { this.primeiro_nome = primeiro_nome; }
-    public void setUltimo_nome(String ultimo_nome) { this.ultimo_nome = ultimo_nome; }
-    public void setImagem(String imagem) { this.imagem = imagem; }
-    public void setClientes(List<ClientesPojo> clientes) { this.clientes = clientes; }
-    public void setLeads(List<LeadsPojo> leads) { this.leads = leads; }
+    // Construtor vazio é obrigatório para o JSON Binding funcionar
+    public UserPojo() {
+    }
 
-    //listas de clientes e leads
-
-    private List<ClientesPojo> clientes= new ArrayList<>();
-    private List<LeadsPojo> leads= new ArrayList<>();
-
-
-//    public String getUsername() {
-//    }
-//
-//    public String getPassword() {
-//    }
-
+    public String getUsername() {
+        return username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public String getfirstName() {
+        return firstName;
+    }
+    public String getlastName() {
+        return lastName;
+    }
+    public String getImage() {
+        return image;
+    }
     public String getEmail() {
         return email;
     }
+    public String getCellphone() { return cellphone; }
+
+
+
+    public List<ClientesPojo> getClientes() {
+        return clientes;
+    }
+    public List<LeadsPojo> getLeads() {
+        return leads;
+    }
+
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public void setfirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setlastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public void setImage(String image) {
+        this.image = image;
+    }
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
+    }
+
+
+    public void setClientes(List<ClientesPojo> clientes) {
+        this.clientes = clientes;
+    }
+    public void setLeads(List<LeadsPojo> leads) {
+        this.leads = leads;
+    }
+
+
 }
+
+
