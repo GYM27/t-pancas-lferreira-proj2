@@ -28,10 +28,10 @@ public class UserPojo {
     public String getPassword() {
         return password;
     }
-    public String getfirstName() {
+    public String getFirstName() {
         return firstName;
     }
-    public String getlastName() {
+    public String getLastName() {
         return lastName;
     }
     public String getImage() {
@@ -61,10 +61,10 @@ public class UserPojo {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setfirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-    public void setlastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
     public void setImage(String image) {

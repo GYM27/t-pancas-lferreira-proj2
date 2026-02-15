@@ -1,102 +1,130 @@
 package pt.uc.dei.proj2.bean;
 
-import java.io.*;
-import java.time.Instant;
-import java.util.ArrayList;
-
-import pt.uc.dei.proj2.dto.LeadsDto;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbConfig;
+import jakarta.inject.Inject;
+import pt.uc.dei.proj2.pojo.UserPojo;
+import pt.uc.dei.proj2.pojo.LeadsPojo;
+
+import java.io.Serializable;
+import java.time.Instant;
+import java.util.Iterator;
+import java.util.List;
 
 @ApplicationScoped
 public class LeadsBean implements Serializable {
 
-    private static final String FILENAME = "leads.json";
-    private ArrayList<LeadsDto> leads;
+    @Inject
+    private UserBean userBean;
 
-    public LeadsBean() {
+    //Listar leads - recebe o username que vem do service
+    public List<LeadsPojo> getLeads(String username) {
 
-        File f = new File(FILENAME);
+        //Vai buscar o utilizador ao UserBean
+        UserPojo user = userBean.getUserByUsername(username);
 
-        if (f.exists()) {
-            try {
-                FileReader reader = new FileReader(f);
-                leads = JsonbBuilder.create()
-                        .fromJson(reader,
-                                new ArrayList<LeadsDto>() {}.getClass().getGenericSuperclass());
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            leads = new ArrayList<>();
+        //Pode devolver lista vazia em vez de null, uma vez que evita o NullPointerException no Service
+        if (user == null) {
+            return List.of();
         }
+        //devolve a lista de leads daquele utilizador
+        return user.getLeads();
     }
 
-    public ArrayList<LeadsDto> getLeads() {
-        return leads;
-    }
 
-    public void addLead(LeadsDto dto) {
+    //Adicionar Lead - recebe username e objeto leaad, vindo do service
+        public boolean addLead(String username, LeadsPojo lead) {
 
-        dto.setId(generateId());
-        dto.setDate(Instant.now().toString());
+        //Vai buscar o utilizador
+        UserPojo user = userBean.getUserByUsername(username);
 
-        leads.add(dto);
-        writeIntoJsonFile();
-    }
-
-    public LeadsDto getLead(int id) {
-        for (LeadsDto l : leads) {
-            if (l.getId() == id)
-                return l;
+        if (user == null) {
+            return false;
         }
-        return null;
+
+        //Gera o Id automaticamente. Cada utilizador tem os seus próprios IDs
+        lead.setId(generateId(user));
+        //Define a data de criação automaticamente
+        lead.setDate(Instant.now().toString());
+
+        //Adiciona a lead à lista do utilizador
+        user.getLeads().add(lead);
+
+        userBean.save(); //Pede ao UserBean para escrever users.json
+
+        return true;
     }
 
-    public boolean updateLead(int id, LeadsDto dto) {
 
-        for (LeadsDto l : leads) {
-            if (l.getId() == id) {
-                l.setTitle(dto.getTitle());
-                l.setDescription(dto.getDescription());
-                l.setState(dto.getState());
+    //Atualizar lead - recebe username, d do lead e ojeto com novos dados
+    public boolean updateLead(String username, int id, LeadsPojo updatedLead) {
 
-                writeIntoJsonFile();
+        //Vai biscar o utilizador
+        UserPojo user = userBean.getUserByUsername(username);
+
+        if (user == null) {
+            return false;
+        }
+
+        //percorre a lista de leads daquele utilizador
+        for (LeadsPojo lead : user.getLeads()) {
+
+            //procura o lead correto
+            if (lead.getId() == id) {
+
+                //atualiza os campos
+                lead.setTitle(updatedLead.getTitle());
+                lead.setDescription(updatedLead.getDescription());
+                lead.setState(updatedLead.getState());
+
+                //persiste alterações no ficheiro JSON
+                userBean.save();
+
                 return true;
             }
         }
+
         return false;
     }
 
-    public boolean removeLead(int id) {
 
-        for (LeadsDto l : leads) {
-            if (l.getId() == id) {
-                leads.remove(l);
-                writeIntoJsonFile();
-                return true;
+    //Remover lead - recebe username e id
+    public boolean removeLead(String username, int id) {
+
+        UserPojo user = userBean.getUserByUsername(username);
+
+        if (user == null) {
+            return false;
+        }
+
+        boolean removed = false;
+
+        Iterator<LeadsPojo> iterator = user.getLeads().iterator();
+
+        while (iterator.hasNext()) {
+            LeadsPojo lead = iterator.next();
+
+            if (lead.getId() == id) {
+                iterator.remove();   // remove de forma segura
+                removed = true;
+                break;               // como os IDs são únicos, podemos parar
             }
         }
-        return false;
-    }
 
-    private void writeIntoJsonFile() {
-
-        Jsonb jsonb = JsonbBuilder.create(new JsonbConfig().withFormatting(true));
-
-        try {
-            jsonb.toJson(leads, new FileOutputStream(FILENAME));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        if (removed) {
+            userBean.save();
         }
+
+        return removed;
     }
 
-    private int generateId() {
-        return leads.stream()
-                .mapToInt(LeadsDto::getId)
+    //Gerar Id baseado nos leads daquele utilizador
+    private int generateId(UserPojo user) {
+
+        //vai buscar todos os Ids, encontra o maior, se não houver nenhum, começa em 0, soma +1 paara termos o próximo ID DISPONÍVEL
+        return user.getLeads().stream()
+                .mapToInt(LeadsPojo::getId)
                 .max()
                 .orElse(0) + 1;
     }
 }
+
