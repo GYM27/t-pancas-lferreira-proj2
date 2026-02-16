@@ -8,6 +8,7 @@ import jakarta.json.bind.JsonbBuilder;
 import pt.uc.dei.proj2.dto.LoginDto;
 import pt.uc.dei.proj2.pojo.UserPojo;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,8 @@ public class UserBean implements Serializable {
     LoginBean loginBean;
 
     // le o ficheiro de dados
-    private final String filename = System.getProperty("user.home") + File.separator + "dataBase.json";
+    private final String filename = "src/main/resources/dataBase.json";
+
     private List<UserPojo> users = new ArrayList<>();
 
     // incia o leitura do ficheiro de dados e o ponto de partida do UserBean
@@ -29,17 +31,24 @@ public class UserBean implements Serializable {
         // cria uma referencia variavel para comfirmar se o ficheiro existe
         File f = new File(filename);
 
+        // Isto mostrará no log do servidor o caminho absoluto que o Java está a tentar usar
+        System.out.println("A procurar base de dados em: " + f.getAbsolutePath());
+
         //verifica se existe se sim carrega senao faz uma nova lista de users
         if (f.exists()) {
             try {
                 // Carrega os utilizadores existentes para a memória
                 FileReader fileReader = new FileReader(f);
-                this.users = JsonbBuilder.create().fromJson(fileReader,new ArrayList<UserPojo>(){}.getClass().getGenericSuperclass());
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                this.users = JsonbBuilder.create().fromJson(fileReader, new ArrayList<UserPojo>() {
+                }.getClass().getGenericSuperclass());
+                System.out.println("Utilizadores carregados: " + this.users.size());
+            } catch (Exception e) {
+                System.err.println("Erro ao ler o ficheiro JSON: " + e.getMessage());
+                this.users = new ArrayList<>();
             }
         } else
-            this.users = new ArrayList<>();
+            System.err.println("AVISO: Ficheiro dataBase.json não encontrado!");
+        this.users = new ArrayList<>();
     }
 
     // metodo para registar novo User
@@ -55,14 +64,14 @@ public class UserBean implements Serializable {
                 return false;
             }
         }
-            // Apos verificar tudo ele cria novo user carregando as duas listas e cria o user
-            newUser.setLeads(new ArrayList<>());
-            newUser.setClientes(new ArrayList<>());
+        // Apos verificar tudo ele cria novo user carregando as duas listas e cria o user
+        newUser.setLeads(new ArrayList<>());
+        newUser.setClientes(new ArrayList<>());
 
-            users.add(newUser);
+        users.add(newUser);
 
-            return writeIntoJsonFile();
-        }
+        return writeIntoJsonFile();
+    }
 
     // metodo para login
     public boolean login(LoginDto loginUserDetails) {
@@ -78,6 +87,19 @@ public class UserBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public UserPojo getUser(String username) {
+        if (username == null) {
+            return null;
+        }
+
+        for (UserPojo user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     // metodo para guardar os dados

@@ -46,6 +46,18 @@ public class UserService {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
+
+    @GET
+    @Path("/getUser")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUser(@QueryParam("username") String username) {
+        UserPojo user = userBean.getUser(username);
+        if (user != null) {
+            return Response.ok(user).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"User not found\"}").build();
+        }
+    }
 }
 
 
