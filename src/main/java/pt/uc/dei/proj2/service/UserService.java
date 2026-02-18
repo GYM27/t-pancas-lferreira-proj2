@@ -51,7 +51,7 @@ public class UserService {
     @Path("/getUser")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@QueryParam("username") String username) {
-        UserPojo user = userBean.getUser(username);
+        UserPojo user = userBean.getUserByUsername(username);
         if (user != null) {
             return Response.ok(user).build();
         } else {
