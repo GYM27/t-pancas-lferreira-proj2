@@ -32,7 +32,7 @@ public class LeadsBean implements Serializable {
 
 
     //Adicionar Lead - recebe username e objeto leaad, vindo do service
-        public boolean addLead(String username, LeadsPojo lead) {
+   public boolean addLead(String username, LeadsPojo lead) {
 
         //Vai buscar o utilizador
         UserPojo user = userBean.getUserByUsername(username);

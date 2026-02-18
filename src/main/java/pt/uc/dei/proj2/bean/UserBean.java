@@ -6,7 +6,6 @@ import pt.uc.dei.proj2.dao.DatabaseDao;
 import pt.uc.dei.proj2.dto.LoginDto;
 import pt.uc.dei.proj2.pojo.DatabasePojo;
 import pt.uc.dei.proj2.pojo.UserPojo;
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -15,14 +14,19 @@ import java.util.ArrayList;
 public class UserBean implements Serializable {
     @Inject
     private DatabaseDao dao; // Injeção do DAO centralizado
-
     @Inject
     private LoginBean loginBean;
     private DatabasePojo database; // Mantém o estado global em memória
 
+
     @jakarta.annotation.PostConstruct
     public void init() {
-        this.database = dao.loadDatabase(); // Carrega via DAO
+        this.database = dao.loadDatabase();
+        // Garante que a lista existe mesmo que o JSON esteja vazio
+        if (this.database.getUsers() == null) {
+            this.database.setUsers(new ArrayList<>());
+        }
+        System.out.println("Utilizadores carregados: " + this.database.getUsers().size());
     }
 
     public boolean register(UserPojo newUser) {
@@ -47,13 +51,12 @@ public class UserBean implements Serializable {
 
     // metodo para login
     public boolean login(LoginDto loginUserDetails) {
-        // verifica se user existe
-        if (loginUserDetails == null) {
-            return false;
-        }
-        // percorre a lista carregada em init
+        if (loginUserDetails == null || database.getUsers() == null) return false;
+
+        // Procura na lista carregada pelo DAO
         for (UserPojo user : database.getUsers()) {
-            if (user.getUsername().equalsIgnoreCase(loginUserDetails.getUsername()) && user.getPassword().equals(loginUserDetails.getPassword())) {
+            if (user.getUsername().equalsIgnoreCase(loginUserDetails.getUsername()) &&
+                    user.getPassword().equals(loginUserDetails.getPassword())) {
                 loginBean.setCurrentUserPojo(user);
                 return true;
             }
