@@ -116,6 +116,22 @@ public class UserBean implements Serializable {
             return false;
         }
     }
+
+    public UserPojo getUserByUsername(String username) {
+
+        for (UserPojo user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+    public void save() {
+        writeIntoJsonFile();
+    }
+
 }
 
 
