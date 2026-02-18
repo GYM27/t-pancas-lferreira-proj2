@@ -1,4 +1,4 @@
-[
+user: [{
   {
     "username": "ana",
     "password": "pass123",
@@ -7,7 +7,8 @@
     "lastName": "Fernandes",
     "cellphone": "912345699"
   },
-  {
+
+    {
     "username": "jose_silva",
     "password": "password123",
     "email": "jose@mail.pt",

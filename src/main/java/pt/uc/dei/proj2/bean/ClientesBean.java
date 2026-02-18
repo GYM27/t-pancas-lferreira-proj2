@@ -19,6 +19,7 @@ import java.util.ArrayList;
 @ApplicationScoped //cria apenas uma instância daquela classe para toda a aplicação enquanto ela estiver a correr
 public class ClientesBean implements Serializable {
 
+
     @Inject
     private DatabaseDao dao;
 
