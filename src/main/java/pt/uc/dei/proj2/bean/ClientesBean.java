@@ -2,19 +2,12 @@ package pt.uc.dei.proj2.bean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.bind.JsonbBuilder;
 import pt.uc.dei.proj2.dao.DatabaseDao;
-import pt.uc.dei.proj2.dto.ClientesDto;
 import pt.uc.dei.proj2.pojo.ClientesPojo;
-import pt.uc.dei.proj2.pojo.DatabasePojo;
 import pt.uc.dei.proj2.pojo.UserPojo;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @ApplicationScoped //cria apenas uma instância daquela classe para toda a aplicação enquanto ela estiver a correr
 public class ClientesBean implements Serializable {
@@ -71,6 +64,7 @@ public class ClientesBean implements Serializable {
     /**
      * Remove um cliente da lista de um utilizador.
      * * @param username O nome do utilizador dono do cliente.
+     *
      * @param clientId O identificador único do cliente a ser removido.
      * @return true se o cliente foi removido com sucesso; false se não for encontrado.
      */
@@ -89,6 +83,15 @@ public class ClientesBean implements Serializable {
             }
         }
         return false;
+    }
+
+    public List<ClientesPojo> getClients(String username) {
+        UserPojo user = userBean.getUserByUsername(username);
+        if (user != null) {
+            return user.getClientes(); // Devolve a lista real guardada no ficheiro JSON
+        }
+        return new ArrayList<>();
+
     }
 }
 

@@ -1,5 +1,6 @@
 package pt.uc.dei.proj2.service;
 
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -7,6 +8,8 @@ import jakarta.ws.rs.core.Response;
 import pt.uc.dei.proj2.bean.ClientesBean;
 import pt.uc.dei.proj2.bean.UserBean;
 import pt.uc.dei.proj2.pojo.ClientesPojo;
+
+import java.util.List;
 
 @Path("/users/{username}/clients")
 public class ClientesService {
@@ -47,11 +50,13 @@ public class ClientesService {
         Response check = validateSecurity(pathUser, authUser, authPass);
         if (check != null) return check;
 
-        return Response.ok(userBean.getUserByUsername(pathUser).getClientes()).build();
-    }
+        //Procura a lista no Bean
+        List<ClientesPojo> lista = clientesBean.getClients(pathUser);
+
+        return Response.ok(lista).build();
+}
 
 
-    // EXEMPLO DE USO NO ADICIONAR
     @POST
     @Path("/addClient")
     public Response addClient(@PathParam("username") String pathUser,
@@ -109,5 +114,6 @@ public class ClientesService {
                     .entity("{\"error\":\"Não foi possível encontrar o cliente para remover\"}").build();
         }
     }
+
 
 }

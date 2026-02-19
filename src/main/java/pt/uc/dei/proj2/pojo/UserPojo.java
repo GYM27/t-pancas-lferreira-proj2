@@ -15,7 +15,7 @@ public class UserPojo {
 
     //Inicializar as listas evita NullPointerException
 
-    private List<ClientesPojo> clientes = new ArrayList<>();
+    private List<ClientesPojo> clients = new ArrayList<>();
     private List<LeadsPojo> leads = new ArrayList<>();
 
     // Construtor vazio é obrigatório para o JSON Binding funcionar
@@ -45,7 +45,7 @@ public class UserPojo {
 
 
     public List<ClientesPojo> getClientes() {
-        return clientes;
+        return clients;
     }
     public List<LeadsPojo> getLeads() {
         return leads;
@@ -76,7 +76,7 @@ public class UserPojo {
 
 
     public void setClientes(List<ClientesPojo> clientes) {
-        this.clientes = clientes;
+        this.clients = clientes;
     }
     public void setLeads(List<LeadsPojo> leads) {
         this.leads = leads;
