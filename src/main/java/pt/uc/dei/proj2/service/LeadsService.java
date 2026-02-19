@@ -24,15 +24,29 @@ public class LeadsService {
     private UserBean userBean;
 
 
-    //Autenticação auxiliar. Método interno para repetir código
-    private boolean authenticate(String authUser, String authPass) {
+    // LeadsService.java
 
-        //Se o header não vier, não autentica
-        if (authUser == null || authPass == null) {
-            return false;
+    private Response validateSecurity(String pathUser, String authUser, String authPass) {
+        // 1. REQUISITO 401: Headers vazios (Unauthorized)
+        if (authUser == null || authPass == null || authUser.isEmpty() || authPass.isEmpty()) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("{\"error\":\"Autenticação necessária (401)\"}").build();
         }
-        //valida username + password no JSON
-        return userBean.login(new LoginDto(authUser, authPass));
+
+        // 2. REQUISITO 403: Credenciais inválidas (Forbidden)
+        // Agora compatível com UserBean.login(String, String)
+        if (!userBean.login(authUser, authPass)) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity("{\"error\":\"Acesso proibido: Credenciais erradas (403)\"}").build();
+        }
+
+        // 3. REQUISITO 403: Verificação de Posse
+        if (!authUser.equals(pathUser)) {
+            return Response.status(Response.Status.FORBIDDEN)
+                    .entity("{\"error\":\"Acesso negado: Não é o dono destas Leads (403)\"}").build();
+        }
+
+        return null; // Sucesso
     }
 
 
@@ -43,17 +57,12 @@ public class LeadsService {
             @HeaderParam("username") String authUser,
             @HeaderParam("password") String authPass) {
 
-        //Segurança dupla: valida credenciais e garante que só acedemos às próprias leads
-        if (!authenticate(authUser, authPass) || !authUser.equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        Response error = validateSecurity(username, authUser, authPass);
+        if (error != null) return error;
 
-        //Vai ao Bean buscar os dados e devolve 200 ok + JSON
         List<LeadsPojo> leads = leadsBean.getLeads(username);
-
         return Response.ok(leads).build();
     }
-
 
     //Adicionar lead
     @POST
@@ -63,19 +72,15 @@ public class LeadsService {
             @HeaderParam("password") String authPass,
             LeadsPojo lead) {
 
-        //Segurança dupla: valida credenciais e garante que só acedemos às próprias leads
-        if (!authenticate(authUser, authPass) || !authUser.equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        Response error = validateSecurity(username, authUser, authPass);
+        if (error != null) return error;
 
-        //Chama a lógica no Bean
         boolean success = leadsBean.addLead(username, lead);
-
         if (!success) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity("{\"error\":\"Erro ao adicionar lead\"}").build();
         }
 
-        //201 created para a criação
         return Response.status(Response.Status.CREATED).build();
     }
 
@@ -90,18 +95,14 @@ public class LeadsService {
             @HeaderParam("password") String authPass,
             LeadsPojo lead) {
 
-        //Segurança dupla: valida credenciais e garante que só acedemos às próprias leads
-        if (!authenticate(authUser, authPass) || !authUser.equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        Response error = validateSecurity(username, authUser, authPass);
+        if (error != null) return error;
 
-        //Atualiza no Bean
         boolean success = leadsBean.updateLead(username, id, lead);
-
         if (!success) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        //200 ok, atualização concluída
+
         return Response.ok().build();
     }
 
@@ -115,18 +116,14 @@ public class LeadsService {
             @HeaderParam("username") String authUser,
             @HeaderParam("password") String authPass) {
 
-        //Segurança dupla: valida credenciais e garante que só acedemos às próprias leads
-        if (!authenticate(authUser, authPass) || !authUser.equals(username)) {
-            return Response.status(Response.Status.FORBIDDEN).build();
-        }
+        Response error = validateSecurity(username, authUser, authPass);
+        if (error != null) return error;
 
-        //Remove no Bean
         boolean success = leadsBean.removeLead(username, id);
-
         if (!success) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        //200 ok - removido com sucesso
+
         return Response.ok().build();
     }
 }

@@ -39,7 +39,7 @@ public class UserService {
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(LoginDto loginData) {
         System.out.println("Tentativa de login para: " + loginData.getUsername());
-        boolean success = userBean.login(loginData);
+        boolean success = userBean.login(loginData.getUsername(), loginData.getPassword());
         if (success) {
             return Response.ok("{\"message\":\"Login successful\"}").build();
         } else {
@@ -58,6 +58,9 @@ public class UserService {
             return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"User not found\"}").build();
         }
     }
+
+
+
 }
 
 

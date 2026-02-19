@@ -3,7 +3,6 @@ package pt.uc.dei.proj2.bean;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import pt.uc.dei.proj2.dao.DatabaseDao;
-import pt.uc.dei.proj2.dto.LoginDto;
 import pt.uc.dei.proj2.pojo.DatabasePojo;
 import pt.uc.dei.proj2.pojo.UserPojo;
 import java.io.*;
@@ -14,8 +13,6 @@ import java.util.ArrayList;
 public class UserBean implements Serializable {
     @Inject
     private DatabaseDao dao; // Injeção do DAO centralizado
-    @Inject
-    private LoginBean loginBean;
     private DatabasePojo database; // Mantém o estado global em memória
 
 
@@ -45,40 +42,61 @@ public class UserBean implements Serializable {
         return true;
     }
 
-    public void save() {
-        dao.saveDatabase(this.database); // Delega a gravação ao DAO
+    public boolean login(String username, String password) {
+        // 1. Verificação básica de segurança
+        if (username == null || password == null || database.getUsers() == null) {
+            return false;
+        }
+
+        // 2. O teu ciclo FOR tradicional (compatível com o que sabes)
+        for (UserPojo u : database.getUsers()) {
+            if (u.getUsername().equalsIgnoreCase(username) &&
+                    u.getPassword().equals(password)) {
+                return true; // Encontrou e a password bate certo!
+            }
+        }
+
+        return false; // Não encontrou ninguém com essas credenciais
     }
 
-    // metodo para login
-    public boolean login(LoginDto loginUserDetails) {
-        if (loginUserDetails == null || database.getUsers() == null) return false;
+    public UserPojo getUserByUsername(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return null;
+        }
 
-        // Procura na lista carregada pelo DAO
-        for (UserPojo user : database.getUsers()) {
-            if (user.getUsername().equalsIgnoreCase(loginUserDetails.getUsername()) &&
-                    user.getPassword().equals(loginUserDetails.getPassword())) {
-                loginBean.setCurrentUserPojo(user);
+        for (UserPojo u : database.getUsers()) {
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                return u;
+            }
+        }
+        return null;
+    }
+
+    public boolean updateUser(String username, UserPojo updatedData) {
+        for (UserPojo u : database.getUsers()) {
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                // Atualizamos os campos que o teu POJO possui
+                u.setFirstName(updatedData.getFirstName());
+                u.setLastName(updatedData.getLastName());
+                u.setEmail(updatedData.getEmail());
+                u.setCellphone(updatedData.getCellphone());
+                u.setImage(updatedData.getImage()); // URL da fotografia
+
+                // Atualiza a password se ela for enviada
+                if (updatedData.getPassword() != null && !updatedData.getPassword().isEmpty()) {
+                    u.setPassword(updatedData.getPassword());
+                }
+
+                save(); // Persiste no ficheiro JSON
                 return true;
             }
         }
         return false;
     }
 
-    public UserPojo getUserByUsername(String username) {
-        // 1. Verificação de segurança inicial
-        if (username == null || username.trim().isEmpty()) {
-            return null;
-        }
-
-        for (UserPojo user : database.getUsers()) {
-            // 2. Verificação de segurança interna e lógica de negócio
-            if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(username)) {
-                return user;
-            }
-        }
-        return null;
+    public void save() {
+        dao.saveDatabase(this.database); // Delega a gravação ao DAO
     }
-
 
 }
 
