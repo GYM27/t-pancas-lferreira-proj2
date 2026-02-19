@@ -1,19 +1,2 @@
-user: [{
-  {
-    "username": "ana",
-    "password": "pass123",
-    "email": "ana@mail.pt",
-    "firstName": "Ana",
-    "lastName": "Fernandes",
-    "cellphone": "912345699"
-  },
-
-    {
-    "username": "jose_silva",
-    "password": "password123",
-    "email": "jose@mail.pt",
-    "firstName": "José",
-    "lastName": "Silva",
-    "cellphone": "912345678"
-  }
-]
+{"users":[
+  {"cellphone":"912345699","clientes":[{"email":"joao@gmail.com","id":0},{"email":"joao@gmail.com","id":0},{"email":"carlos@bridgetech.pt","id":101,"nome_responsavel":"Carlos Ferreira","numero_telefone":"912345678","organizao":"Bridge Tech Solutions"},{"email":"carla@gmail.com","id":0},{"email":"carlos.oliveira@empresa.pt","id":0}],"email":"ana@mail.pt","firstName":"Ana","lastName":"Fernandes","leads":[],"password":"pass123","username":"ana"},{"cellphone":"912345678","clientes":[],"email":"jose@mail.pt","firstName":"José","lastName":"Silva","leads":[],"password":"password123","username":"jose_silva"},{"cellphone":"912564499","clientes":[],"email":"tiago@mail.pt","firstName":"Tiago","lastName":"Silva","leads":[],"password":"password1234","username":"tiago"},{"cellphone":"987654321","clientes":[],"email":"psantos@gmail.com","firstName":"Paulo","lastName":"Santos","leads":[],"password":"pass123","username":"psantos"}]}

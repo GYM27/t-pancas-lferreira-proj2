@@ -10,7 +10,7 @@ public class UserPojo {
     private String email;
     private String firstName;
     private String lastName;
-    private String image;
+    private String photo;
     private String cellphone;
 
     //Inicializar as listas evita NullPointerException
@@ -35,14 +35,12 @@ public class UserPojo {
         return lastName;
     }
     public String getImage() {
-        return image;
+        return photo;
     }
     public String getEmail() {
         return email;
     }
     public String getCellphone() { return cellphone; }
-
-
 
     public List<ClientesPojo> getClientes() {
         return clients;
@@ -67,13 +65,12 @@ public class UserPojo {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public void setImage(String image) {
-        this.image = image;
+    public void setImage(String photo) {
+        this.photo = photo;
     }
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
     }
-
 
     public void setClientes(List<ClientesPojo> clientes) {
         this.clients = clientes;

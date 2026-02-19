@@ -14,7 +14,7 @@ public class CorsFilter implements ContainerResponseFilter {
                        ContainerResponseContext responseContext) throws IOException {
 
         // Permite pedidos vindos da origem do seu Live Server
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:63342");
 
         // Autoriza as credenciais (necessário se usar cookies ou autenticação específica)
         responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
