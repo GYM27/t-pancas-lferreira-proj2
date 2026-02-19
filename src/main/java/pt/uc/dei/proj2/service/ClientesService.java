@@ -39,6 +39,18 @@ public class ClientesService {
         return null; // Tudo OK!
     }
 
+    @GET
+    public Response getClients(@PathParam("username") String pathUser,
+                               @HeaderParam("username") String authUser,
+                               @HeaderParam("password") String authPass) {
+
+        Response check = validateSecurity(pathUser, authUser, authPass);
+        if (check != null) return check;
+
+        return Response.ok(userBean.getUserByUsername(pathUser).getClientes()).build();
+    }
+
+
     // EXEMPLO DE USO NO ADICIONAR
     @POST
     @Path("/addClient")
