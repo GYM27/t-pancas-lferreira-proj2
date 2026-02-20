@@ -80,7 +80,7 @@ public class UserBean implements Serializable {
                 u.setLastName(updatedData.getLastName());
                 u.setEmail(updatedData.getEmail());
                 u.setCellphone(updatedData.getCellphone());
-                u.setImage(updatedData.getImage()); // URL da fotografia
+                u.setPhoto(updatedData.getPhoto()); // URL da fotografia
 
                 // Atualiza a password se ela for enviada
                 if (updatedData.getPassword() != null && !updatedData.getPassword().isEmpty()) {
