@@ -13,14 +13,11 @@ public class UserPojo {
     private String photo;
     private String cellphone;
 
-    //Inicializar as listas evita NullPointerException
-
-    private List<ClientesPojo> clients = new ArrayList<>();
+    private List<ClientesPojo> clientes = new ArrayList<>();
     private List<LeadsPojo> leads = new ArrayList<>();
 
-    // Construtor vazio é obrigatório para o JSON Binding funcionar
-    public UserPojo() {
-    }
+    //construtor vazio para JSON binding
+    public UserPojo() {}
 
     public String getUsername() {
         return username;
@@ -73,13 +70,10 @@ public class UserPojo {
     }
 
     public void setClientes(List<ClientesPojo> clientes) {
-        this.clients = clientes;
+        this.clientes = (clientes != null) ? clientes : new ArrayList<>();
     }
+
     public void setLeads(List<LeadsPojo> leads) {
-        this.leads = leads;
+        this.leads = (leads != null) ? leads : new ArrayList<>();
     }
-
-
 }
-
-

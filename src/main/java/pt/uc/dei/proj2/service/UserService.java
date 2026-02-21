@@ -15,6 +15,8 @@ import jakarta.ws.rs.*;
 
 
 @Path("/users")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class UserService {
 
     @Inject
@@ -105,7 +107,7 @@ public class UserService {
             @HeaderParam("password") String authPass,
             UserPojo updatedData) {
 
-        // 1. Segurança
+        //Segurança
         if (authUser == null || authPass == null ||
                 !userBean.login(authUser, authPass)) {
 
@@ -120,27 +122,22 @@ public class UserService {
                     .build();
         }
 
-        // 2. Buscar utilizador
-        UserPojo user = userBean.getUserByUsername(pathUser);
+        //Método do Bean
+        boolean updated = userBean.updateUser(pathUser, updatedData);
 
-        if (user == null) {
+        if (!updated) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("{\"error\":\"Utilizador não encontrado\"}")
                     .build();
         }
 
-        // 3. Atualizar apenas campos permitidos (NUNCA username)
-        user.setPassword(updatedData.getPassword());
-        user.setEmail(updatedData.getEmail());
-        user.setFirstName(updatedData.getFirstName());
-        user.setLastName(updatedData.getLastName());
-        user.setCellphone(updatedData.getCellphone());
-        user.setPhoto(updatedData.getPhoto());
-
-        // 4. Persistir
-        userBean.save();
-
         return Response.ok("{\"message\":\"Perfil atualizado com sucesso\"}").build();
+    }
+
+    @OPTIONS
+    @Path("/{username}/{any: .*}")
+    public Response corsPreflight() {
+        return Response.ok().build();
     }
 }
 

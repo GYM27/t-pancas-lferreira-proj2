@@ -20,6 +20,10 @@ public class UserBean implements Serializable {
     @jakarta.annotation.PostConstruct
     public void init() {
         this.database = dao.loadDatabase();
+
+        System.out.println("DEBUG INIT - USERS CARREGADOS: "
+                + (database.getUsers() == null ? "null" : database.getUsers().size()));
+
         // Garante que a lista existe mesmo que o JSON esteja vazio
         if (this.database.getUsers() == null) {
             this.database.setUsers(new ArrayList<>());
@@ -76,7 +80,10 @@ public class UserBean implements Serializable {
     public boolean updateUser(String username, UserPojo updatedData) {
         for (UserPojo u : database.getUsers()) {
             if (u.getUsername().equalsIgnoreCase(username)) {
-                // Atualizamos os campos que o teu POJO possui
+
+                System.out.println("DEBUG PHOTO RECEBIDA: " + updatedData.getPhoto());
+
+                // Atualizamos os campos que o POJO possui
                 u.setFirstName(updatedData.getFirstName());
                 u.setLastName(updatedData.getLastName());
                 u.setEmail(updatedData.getEmail());

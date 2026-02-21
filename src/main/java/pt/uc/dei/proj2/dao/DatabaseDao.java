@@ -49,7 +49,12 @@ public class DatabaseDao implements Serializable {
      * * @param database O objeto {@link DatabasePojo} contendo todos os dados a serem persistidos.
      */
     public void saveDatabase(DatabasePojo database) {
+
+        System.out.println("user.dir = " + System.getProperty("user.dir"));
+        System.out.println("FILE_PATH = " + FILE_PATH);
         try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
+
+            System.out.println("A guardar em: " + new File(FILE_PATH).getAbsolutePath());
             // O toJson converte o objeto para texto e o FileOutputStream guarda-o
             jsonb.toJson(database, fos);
         } catch (Exception e) {

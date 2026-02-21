@@ -9,19 +9,19 @@ public class UserDto implements Serializable {
     private String email;
     private String firstName;
     private String lastName;
-    private String image;
+    private String photo;
     private String cellphone;
 
     public UserDto() {
     }
 
-    public UserDto(String username, String password, String email, String firstName, String ultimo_nome, String image, String cellphone) {
+    public UserDto(String username, String password, String email, String firstName, String ultimo_nome, String photo, String cellphone) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.image = image;
+        this.photo = photo;
         this.cellphone = cellphone;
     }
 
@@ -60,11 +60,11 @@ public class UserDto implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getImagem() {
-        return image;
+    public String getPhoto() {
+        return photo;
     }
-    public void setImagem(String image) {
-        this.image = image;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getCellphone() {
