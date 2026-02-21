@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import pt.uc.dei.proj2.dao.DatabaseDao;
 import pt.uc.dei.proj2.pojo.ClientesPojo;
+import pt.uc.dei.proj2.pojo.DatabasePojo;
 import pt.uc.dei.proj2.pojo.UserPojo;
 
 import java.io.Serializable;
@@ -15,21 +16,51 @@ public class ClientesBean implements Serializable {
 
 
     @Inject
-    private DatabaseDao dao;
+    private DatabaseDao databaseDao;
     @Inject
     private UserBean userBean;
 
+
     public boolean addClients(String username, ClientesPojo newClient) {
+        // 1. Vai buscar a base de dados (ficheiro JSON)
+        DatabasePojo db = databaseDao.loadDatabase();
 
-        UserPojo user = userBean.getUserByUsername(username);
-        if (user != null) {
-            user.getClients().add(newClient);
-            userBean.save(); // Esta linha grava no dataBase.json
-            return true;
+        // 2. Procura o utilizador na lista
+        UserPojo currentUser = null;
+        for (UserPojo u : db.getUsers()) {
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                currentUser = u;
+                break;
+            }
         }
-        return false;
-    }
 
+        if (currentUser == null) return false;
+
+        // --- CORREÇÃO IMPORTANTE ---
+        // Se o utilizador nunca adicionou um cliente, a lista pode estar nula.
+        // Inicializamos a lista para evitar o NullPointerException (Erro 500).
+        if (currentUser.getClients() == null) {
+            currentUser.setClients(new ArrayList<>());
+        }
+
+        // 3. GERAÇÃO DO ID MANUAL (Sem Stream)
+        int maiorId = 0;
+        // Percorre todos os clientes existentes do utilizador para encontrar o ID mais alto
+        for (ClientesPojo c : currentUser.getClients()) {
+            if (c.getId() > maiorId) {
+                maiorId = c.getId();
+            }
+        }
+
+        // O novo ID será o maior encontrado + 1 para manter a sequência numérica
+        newClient.setId(maiorId + 1);
+
+        // 4. Adiciona à lista e guarda no ficheiro único JSON [cite: 237, 52]
+        currentUser.getClients().add(newClient);
+
+        // Persiste as alterações no ficheiro dataBase.json [cite: 8, 52]
+        return databaseDao.saveDatabase(db);
+    }
     /**
      * Edita os dados de um cliente existente na lista de um utilizador específico.
      * * @param username O nome do utilizador dono da lista de clientes.
@@ -73,7 +104,7 @@ public class ClientesBean implements Serializable {
 
         if (user != null && user.getClients() != null) {
             // 2. Tenta remover o cliente cujo ID coincida com o fornecido na lista em memória
-            boolean removed = user.getClients().removeIf(client -> client.getId().equals(clientId));
+            boolean removed = user.getClients().removeIf(client -> client.getId() ==(clientId));
 
             if (removed) {
                 // 3. Se algo foi removido, utiliza o UserBean para persistir a alteração global

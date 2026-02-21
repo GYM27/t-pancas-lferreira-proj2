@@ -1,10 +1,12 @@
 package pt.uc.dei.proj2.pojo;
 
+import jakarta.annotation.Nonnull;
+
 import java.util.UUID;
 
 public class ClientesPojo {
 
-    private UUID id;
+    private int id;
     private String nome;
     private String email;
     private String telefone;
@@ -18,14 +20,14 @@ public class ClientesPojo {
         this.nome = nome;
         this.email = email;
         this.telefone = telefone;
-        this.id = UUID.randomUUID();
+        this.id = id;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(int id) {
         this.id = id;
     }
 
