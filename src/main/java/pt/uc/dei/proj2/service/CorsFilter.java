@@ -34,18 +34,22 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
                        ContainerResponseContext responseContext) throws IOException {
 
         // Permite pedidos vindos da origem do seu Live Server
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
+       // responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
         //responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
+        responseContext.getHeaders().putSingle(
+                "Access-Control-Allow-Origin",
+                "*"
+        );
 
         // Autoriza as credenciais (necessário se usar cookies ou autenticação específica)
-        responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
 
         // Autoriza os cabeçalhos personalizados que está a enviar no fetch (username, password, etc)
-        responseContext.getHeaders().add("Access-Control-Allow-Headers",
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Headers",
                 "origin, content-type, accept, authorization, username, password");
 
         // Autoriza os métodos HTTP que a sua API utiliza
-        responseContext.getHeaders().add("Access-Control-Allow-Methods",
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Methods",
                 "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     }
 }
