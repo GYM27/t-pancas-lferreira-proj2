@@ -2,29 +2,39 @@ package pt.uc.dei.proj2.service;
 
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseFilter;
 import jakarta.ws.rs.ext.Provider;
+import jakarta.ws.rs.core.Response;
+
 import java.io.IOException;
 
 @Provider
-public class CorsFilter implements ContainerResponseFilter {
+public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
+    // Trata o preflight (OPTIONS)
+    @Override
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        if ("OPTIONS".equalsIgnoreCase(requestContext.getMethod())) {
+
+            Response response = Response.ok()
+                    .header("Access-Control-Allow-Origin", "*")
+                    .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+                    .header("Access-Control-Allow-Headers", "Content-Type, Authorization, username, password")
+                    .build();
+
+            requestContext.abortWith(response);
+        }
+    }
+
+    // Adiciona os headers CORS às respostas normais
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
 
-        // Permite pedidos vindos da origem do seu Live Server
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:63342");
-
-        // Autoriza as credenciais (necessário se usar cookies ou autenticação específica)
-        responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");
-
-        // Autoriza os cabeçalhos personalizados que está a enviar no fetch (username, password, etc)
-        responseContext.getHeaders().add("Access-Control-Allow-Headers",
-                "origin, content-type, accept, authorization, username, password");
-
-        // Autoriza os métodos HTTP que a sua API utiliza
-        responseContext.getHeaders().add("Access-Control-Allow-Methods",
-                "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Origin", "*");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        responseContext.getHeaders().putSingle("Access-Control-Allow-Headers", "Content-Type, Authorization, username, password");
     }
 }

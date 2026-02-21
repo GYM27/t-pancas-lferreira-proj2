@@ -12,6 +12,8 @@ import pt.uc.dei.proj2.pojo.ClientesPojo;
 import java.util.List;
 
 @Path("/users/{username}/clients")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ClientesService {
 
     @Inject
@@ -43,6 +45,7 @@ public class ClientesService {
     }
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getClients(@PathParam("username") String pathUser,
                                @HeaderParam("username") String authUser,
                                @HeaderParam("password") String authPass) {
@@ -50,11 +53,10 @@ public class ClientesService {
         Response check = validateSecurity(pathUser, authUser, authPass);
         if (check != null) return check;
 
-        //Procura a lista no Bean
         List<ClientesPojo> lista = clientesBean.getClients(pathUser);
 
         return Response.ok(lista).build();
-}
+    }
 
 
     @POST
