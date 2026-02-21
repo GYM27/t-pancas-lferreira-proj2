@@ -18,9 +18,7 @@ import java.io.Serializable;
 public class DatabaseDao implements Serializable {
 
     /** Caminho relativo para o ficheiro de base de dados JSON. */
-    private final String FILE_PATH =
-            System.getProperty("jboss.server.base.dir")
-                    + File.separator + "dataBase.json";
+    private final String FILE_PATH = "dataBase.json";
 
     /** Motor JSON-B para conversão entre objetos Java e formato JSON. */
     private final Jsonb jsonb = JsonbBuilder.create();
