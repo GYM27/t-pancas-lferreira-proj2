@@ -5,14 +5,14 @@ public class LeadsDto {
     private int id;
     private String title;
     private String description;
-    private String state;
+    private int state;
     private String date;
 
     //Construtor vazio para receber o JSON e converter em Java
     public LeadsDto(){
     }
 
-    public LeadsDto(int id, String title, String description, String state, String date) {
+    public LeadsDto(int id, String title, String description, int state, String date) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -33,7 +33,7 @@ public class LeadsDto {
         return description;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
@@ -54,7 +54,7 @@ public class LeadsDto {
         this.description = description;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 

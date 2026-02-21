@@ -13,7 +13,7 @@ public class UserPojo {
     private String photo;
     private String cellphone;
 
-    private List<ClientesPojo> clientes = new ArrayList<>();
+    private List<ClientesPojo> clients = new ArrayList<>();
     private List<LeadsPojo> leads = new ArrayList<>();
 
     //construtor vazio para JSON binding
@@ -69,8 +69,8 @@ public class UserPojo {
         this.cellphone = cellphone;
     }
 
-    public void setClientes(List<ClientesPojo> clientes) {
-        this.clientes = (clientes != null) ? clientes : new ArrayList<>();
+    public void setClientes(List<ClientesPojo> clients) {
+        this.clients = (clients != null) ? clients : new ArrayList<>();
     }
 
     public void setLeads(List<LeadsPojo> leads) {

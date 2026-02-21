@@ -5,7 +5,7 @@ public class LeadsPojo {
     private int id;
     private String title;
     private String description;
-    private String state;
+    private int state;
     private String date;
 
     //Construtor vazio para criar objetos dinamicamente e serializar/deserializar JSON
@@ -13,7 +13,7 @@ public class LeadsPojo {
 
     }
 
-    public LeadsPojo(int id, String title, String description, String state, String date) {
+    public LeadsPojo(int id, String title, String description, int state, String date) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,7 +34,7 @@ public class LeadsPojo {
         return description;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
@@ -55,7 +55,7 @@ public class LeadsPojo {
         this.description = description;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 

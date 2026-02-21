@@ -4,6 +4,7 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.container.ContainerResponseFilter;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 
 import java.io.IOException;
@@ -33,7 +34,8 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
                        ContainerResponseContext responseContext) throws IOException {
 
         // Permite pedidos vindos da origem do seu Live Server
-        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500");
+        responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
+        //responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
 
         // Autoriza as credenciais (necessário se usar cookies ou autenticação específica)
         responseContext.getHeaders().add("Access-Control-Allow-Credentials", "true");

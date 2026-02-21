@@ -4,39 +4,38 @@ import java.util.UUID;
 
 public class ClientesDto {
 
-    private String organizao;
+    private String organizacao;
     private String nome;
     private String email;
-    private String numero_telefone;
+    private String telefone;
     private UUID id;
     
 
     public ClientesDto() {
     }
 
-    public ClientesDto(String organizao, String nome, String email, String numero_telefone) {
-        this.organizao = organizao;
+    public ClientesDto(String organizao, String nome, String email, String telefone) {
+        this.organizacao = organizao;
         this.nome = nome;
         this.email = email;
-        this.numero_telefone = numero_telefone;
+        this.telefone = telefone;
         this.id = UUID.randomUUID();
     }
 
     // Getters e Setters necessários para a conversão JSON
 
-    public String getOrganizao() {
-        return organizao;
+    public String getOrganizacao() {
+        return organizacao;
     }
 
-    public void setOrganizao(String organizao) {
-        this.organizao = organizao;
+    public void setOrganizacao(String organizacao) {
+        this.organizacao = organizacao;
     }
-
-    public String getNome_responsavel() {
+    public String getNome() {
         return nome;
     }
 
-    public void setNome_responsavel(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -48,12 +47,12 @@ public class ClientesDto {
         this.email = email;
     }
 
-    public String getNumero_telefone() {
-        return numero_telefone;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setNumero_telefone(String numero_telefone) {
-        this.numero_telefone = numero_telefone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
     public UUID getId() {
