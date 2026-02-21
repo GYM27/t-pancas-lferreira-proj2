@@ -7,6 +7,7 @@ import pt.uc.dei.proj2.pojo.UserPojo;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -26,32 +27,36 @@ public class LeadsBean implements Serializable {
             return user.getLeads();
         }
 
-        return List.of(); // evita NullPointerException
+        //return List.of(); // evita NullPointerException mas nao deixa que a lista seja alterada depois
+        return new ArrayList<>();
     }
 
     /**
      * Adiciona uma nova lead ao utilizador.
      */
     public boolean addLead(String username, LeadsPojo newLead) {
-
+        // 1. Procurar o utilizador
         UserPojo user = userBean.getUserByUsername(username);
 
-        if (user != null && user.getLeads() != null) {
+        if (user != null) {
+            // 2. CORREÇÃO CRÍTICA: Se a lista for nula (utilizador novo), inicializamos
+            if (user.getLeads() == null) {
+                user.setLeads(new ArrayList<>());
+            }
 
-            // Gerar ID automaticamente
+            // 3. Gerar ID e Data
             newLead.setId(generateId(user));
-
-            // Definir data de criação
+            // Instant.now().toString() gera uma String
             newLead.setDate(Instant.now().toString());
 
+            // 4. Adicionar à lista e mandar gravar no dataBase.json
             user.getLeads().add(newLead);
 
-            userBean.save(); // Persistir alteração global
-
-            return true;
+            // userBean.save() deve retornar boolean (true se gravou no ficheiro com sucesso)
+            return userBean.save();
         }
 
-        return false;
+        return false; // Utilizador não encontrado
     }
 
     /**
@@ -65,7 +70,7 @@ public class LeadsBean implements Serializable {
 
             for (int i = 0; i < user.getLeads().size(); i++) {
 
-                if (user.getLeads().get(i).getId() == editedLead.getId()) {
+                if (user.getLeads().get(i).getId().equals(editedLead.getId())) {
 
                     user.getLeads().set(i, editedLead);
 

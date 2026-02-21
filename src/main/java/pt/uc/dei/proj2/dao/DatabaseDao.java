@@ -17,10 +17,14 @@ import java.io.Serializable;
 @ApplicationScoped
 public class DatabaseDao implements Serializable {
 
-    /** Caminho relativo para o ficheiro de base de dados JSON. */
-    private final String FILE_PATH = "dataBase.json";
+    /**
+     * Caminho para o ficheiro de base de dados JSON, utilizando a pasta de dados do WildFly.
+     */
+    private final String FILE_PATH = System.getProperty("jboss.server.data.dir") + File.separator + "dataBase.json";
 
-    /** Motor JSON-B para conversão entre objetos Java e formato JSON. */
+    /**
+     * Motor JSON-B para conversão entre objetos Java e formato JSON.
+     */
     private final Jsonb jsonb = JsonbBuilder.create();
 
     /**
@@ -45,20 +49,25 @@ public class DatabaseDao implements Serializable {
 
     /**
      * Guarda o estado atual da base de dados no ficheiro JSON.
-     * Utiliza serialização para converter o objeto Java em texto formatado.
-     * * @param database O objeto {@link DatabasePojo} contendo todos os dados a serem persistidos.
+     *
+     * @param database O objeto {@link DatabasePojo} contendo todos os dados a serem persistidos.
+     * @return true se a gravação for bem-sucedida, false caso ocorra um erro.
      */
-    public void saveDatabase(DatabasePojo database) {
-
+    public boolean saveDatabase(DatabasePojo database) {
+        // Manter os prints ajuda no debug durante o desenvolvimento
         System.out.println("user.dir = " + System.getProperty("user.dir"));
         System.out.println("FILE_PATH = " + FILE_PATH);
-        try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
 
+        try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
             System.out.println("A guardar em: " + new File(FILE_PATH).getAbsolutePath());
-            // O toJson converte o objeto para texto e o FileOutputStream guarda-o
+
+            // Converte o objeto e escreve no ficheiro
             jsonb.toJson(database, fos);
+
+            return true; // Se chegou aqui sem erro, a gravação foi um sucesso
         } catch (Exception e) {
             e.printStackTrace();
+            return false; // Se entrar no catch, algo falhou (ex: falta de permissões ou disco cheio)
         }
     }
 }

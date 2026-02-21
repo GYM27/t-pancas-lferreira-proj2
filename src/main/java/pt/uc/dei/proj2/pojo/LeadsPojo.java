@@ -2,18 +2,18 @@ package pt.uc.dei.proj2.pojo;
 
 public class LeadsPojo {
 
-    private int id;
+    private Integer id;
     private String title;
     private String description;
-    private int state;
+    private Integer state;
     private String date;
 
     //Construtor vazio para criar objetos dinamicamente e serializar/deserializar JSON
-    public LeadsPojo(){
+    public LeadsPojo() {
 
     }
 
-    public LeadsPojo(int id, String title, String description, int state, String date) {
+    public LeadsPojo(Integer id, String title, String description, Integer state, String date) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -21,42 +21,41 @@ public class LeadsPojo {
         this.date = date;
     }
 
-    //Getters
-    public int getId() {
+
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    //Setters
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setState(int state) {
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
         this.state = state;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public void setDate(String date) {

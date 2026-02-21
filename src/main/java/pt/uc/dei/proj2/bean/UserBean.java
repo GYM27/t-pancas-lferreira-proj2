@@ -40,7 +40,7 @@ public class UserBean implements Serializable {
         }
 
         newUser.setLeads(new ArrayList<>());
-        newUser.setClientes(new ArrayList<>());
+        newUser.setClients(new ArrayList<>());
         database.getUsers().add(newUser);
 
         save(); // Chama o método de persistência interno
@@ -102,8 +102,8 @@ public class UserBean implements Serializable {
         return false;
     }
 
-    public void save() {
-        dao.saveDatabase(this.database); // Delega a gravação ao DAO
+    public boolean save() {
+        return dao.saveDatabase(this.database); // Delega a gravação ao DAO
     }
 
 }

@@ -69,7 +69,7 @@ public class UserPojo {
         this.cellphone = cellphone;
     }
 
-    public void setClientes(List<ClientesPojo> clients) {
+    public void setClients(List<ClientesPojo> clients) {
         this.clients = (clients != null) ? clients : new ArrayList<>();
     }
 
