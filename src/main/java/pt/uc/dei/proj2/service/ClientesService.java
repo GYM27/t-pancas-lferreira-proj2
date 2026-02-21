@@ -54,7 +54,7 @@ public class ClientesService {
         List<ClientesPojo> lista = clientesBean.getClients(pathUser);
 
         return Response.ok(lista).build();
-}
+    }
 
 
     @POST
@@ -69,7 +69,7 @@ public class ClientesService {
 
         // Se passar, executa a lógica
         if (clientesBean.addClients(pathUser, client)) {
-            return Response.status(Response.Status.CREATED).entity("{\"msg\":\"Ok\"}").build();
+            return Response.status(Response.Status.CREATED).entity("{Cliente adicionado com sucesso}").build();
         }
         return Response.status(500).build();
     }
@@ -88,10 +88,10 @@ public class ClientesService {
 
         // 2. Lógica de Negócio
         if (clientesBean.editClient(pathUser, client)) {
-            return Response.ok("{\"message\":\"Cliente atualizado com sucesso\"}").build();
+            return Response.ok("{Cliente atualizado com sucesso}").build();
         } else {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Cliente não encontrado para edição\"}").build();
+                    .entity("{Cliente não encontrado para edição}").build();
         }
     }
 
@@ -108,12 +108,11 @@ public class ClientesService {
 
         // 2. Lógica de Negócio
         if (clientesBean.removeClient(pathUser, clientId)) {
-            return Response.ok("{\"message\":\"Cliente removido com sucesso\"}").build();
-        } else {
+            return Response.ok("{Cliente removido com sucesso}").build();
+        } else
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("{\"error\":\"Não foi possível encontrar o cliente para remover\"}").build();
-        }
+                    .entity("{Não foi possível encontrar o cliente para remover}").build();
     }
-
-
 }
+
+

@@ -20,12 +20,14 @@ public class ClientesBean implements Serializable {
 
     public boolean addClients(String username, ClientesPojo newClient) {
 
-        // Obtém o utilizador do estado centralizado
         UserPojo user = userBean.getUserByUsername(username);
-
         if (user != null) {
-            user.getClientes().add(newClient);
-            userBean.save(); // Grava a alteração global
+            // Criar um ID único baseado no tempo (timestamp)
+            int uniqueId = (int) (System.currentTimeMillis());
+            newClient.setId(uniqueId);
+
+            user.getClients().add(newClient);
+            userBean.save(); // Esta linha grava no dataBase.json
             return true;
         }
         return false;
@@ -43,13 +45,13 @@ public class ClientesBean implements Serializable {
         UserPojo user = userBean.getUserByUsername(username);
 
         // 2. Procura o utilizador correto na lista global
-        if (user != null && user.getClientes() != null) {
+        if (user != null && user.getClients() != null) {
             // 2. Procura o cliente pelo ID dentro da lista desse utilizador
-            for (int i = 0; i < user.getClientes().size(); i++) {
-                if (user.getClientes().get(i).getId() == editClient.getId()) {
+            for (int i = 0; i < user.getClients().size(); i++) {
+                if (user.getClients().get(i).getId() == editClient.getId()) {
 
                     // 3. Substitui o cliente antigo pelo objeto com os novos dados
-                    user.getClientes().set(i, editClient);
+                    user.getClients().set(i, editClient);
 
                     // 4. Pede ao UserBean para persistir a alteração global via DAO
                     userBean.save();
@@ -72,9 +74,9 @@ public class ClientesBean implements Serializable {
         // 1. Obtém o utilizador diretamente do estado centralizado no UserBean
         UserPojo user = userBean.getUserByUsername(username);
 
-        if (user != null && user.getClientes() != null) {
+        if (user != null && user.getClients() != null) {
             // 2. Tenta remover o cliente cujo ID coincida com o fornecido na lista em memória
-            boolean removed = user.getClientes().removeIf(client -> client.getId() == clientId);
+            boolean removed = user.getClients().removeIf(client -> client.getId() == clientId);
 
             if (removed) {
                 // 3. Se algo foi removido, utiliza o UserBean para persistir a alteração global
@@ -88,7 +90,7 @@ public class ClientesBean implements Serializable {
     public List<ClientesPojo> getClients(String username) {
         UserPojo user = userBean.getUserByUsername(username);
         if (user != null) {
-            return user.getClientes(); // Devolve a lista real guardada no ficheiro JSON
+            return user.getClients(); // Devolve a lista real guardada no ficheiro JSON
         }
         return new ArrayList<>();
 

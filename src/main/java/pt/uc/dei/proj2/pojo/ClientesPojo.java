@@ -2,37 +2,37 @@ package pt.uc.dei.proj2.pojo;
 
 public class ClientesPojo {
 
-    private String organizao;
-    private String nome_responsavel;
-    private String email;
-    private String numero_telefone;
     private int id;
+    private String nome;
+    private String email;
+    private String telefone;
+    private String organizacao;
 
     public ClientesPojo() {
     }
 
-    public ClientesPojo(String organizao, String nome_responsavel, String email, String numero_telefone, int id) {
-        this.organizao = organizao;
-        this.nome_responsavel = nome_responsavel;
+    public ClientesPojo(String organizacao, String nome, String email, String telefone, int id) {
+        this.organizacao = organizacao;
+        this.nome = nome;
         this.email = email;
-        this.numero_telefone = numero_telefone;
+        this.telefone = telefone;
         this.id = id;
     }
 
-    public String getOrganizao() {
-        return organizao;
+    public int getId() {
+        return id;
     }
 
-    public void setOrganizao(String organizao) {
-        this.organizao = organizao;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getNome_responsavel() {
-        return nome_responsavel;
+    public String getNome() {
+        return nome;
     }
 
-    public void setNome_responsavel(String nome_responsavel) {
-        this.nome_responsavel = nome_responsavel;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {
@@ -43,22 +43,20 @@ public class ClientesPojo {
         this.email = email;
     }
 
-    public String getNumero_telefone() {
-        return numero_telefone;
+    public String getTelefone() {
+        return telefone;
     }
 
-    public void setNumero_telefone(String numero_telefone) {
-        this.numero_telefone = numero_telefone;
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 
-    public int getId() {
-        return id;
+    public String getOrganizacao() {
+        return organizacao;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setOrganizacao(String organizacao) {
+        this.organizacao = organizacao;
     }
 }
-
-
 

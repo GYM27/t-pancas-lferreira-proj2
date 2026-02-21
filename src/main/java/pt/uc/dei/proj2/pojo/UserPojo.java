@@ -34,7 +34,7 @@ public class UserPojo {
     public String getLastName() {
         return lastName;
     }
-    public String getImage() {
+    public String getPhoto() {
         return photo;
     }
     public String getEmail() {
@@ -42,7 +42,7 @@ public class UserPojo {
     }
     public String getCellphone() { return cellphone; }
 
-    public List<ClientesPojo> getClientes() {
+    public List<ClientesPojo> getClients() {
         return clients;
     }
     public List<LeadsPojo> getLeads() {
@@ -65,7 +65,7 @@ public class UserPojo {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    public void setImage(String photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
     public void setCellphone(String cellphone) {
