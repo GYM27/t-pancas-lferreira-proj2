@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import pt.uc.dei.proj2.dao.DatabaseDao;
 import pt.uc.dei.proj2.pojo.ClientesPojo;
 import pt.uc.dei.proj2.pojo.UserPojo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +23,6 @@ public class ClientesBean implements Serializable {
 
         UserPojo user = userBean.getUserByUsername(username);
         if (user != null) {
-            // Criar um ID único baseado no tempo (timestamp)
-            int uniqueId = (int) (System.currentTimeMillis());
-            newClient.setId(uniqueId);
-
             user.getClients().add(newClient);
             userBean.save(); // Esta linha grava no dataBase.json
             return true;
@@ -76,7 +73,7 @@ public class ClientesBean implements Serializable {
 
         if (user != null && user.getClients() != null) {
             // 2. Tenta remover o cliente cujo ID coincida com o fornecido na lista em memória
-            boolean removed = user.getClients().removeIf(client -> client.getId() == clientId);
+            boolean removed = user.getClients().removeIf(client -> client.getId().equals(clientId));
 
             if (removed) {
                 // 3. Se algo foi removido, utiliza o UserBean para persistir a alteração global
