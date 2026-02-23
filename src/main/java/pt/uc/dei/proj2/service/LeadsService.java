@@ -25,7 +25,7 @@ public class LeadsService {
     //Método fixo de segurança
     private Response validateSecurity(String pathUser, String authUser, String authPass) {
 
-        // 1 - 401 - Sem credenciais
+        //1 - 401 - Sem credenciais
         if (authUser == null || authUser.trim().isEmpty()
                 || authPass == null || authPass.trim().isEmpty()) {
 
@@ -34,21 +34,21 @@ public class LeadsService {
                     .build();
         }
 
-        // 2 - 403 - Credenciais erradas
+        //2 - 403 - Credenciais erradas
         if (!userBean.login(authUser, authPass)) {
             return Response.status(Response.Status.FORBIDDEN)
                     .entity("{\"error\":\"Login inválido (403)\"}")
                     .build();
         }
 
-        // 3 - 403 - Acesso a dados de outro utilizador
+        //3 - 403 - Acesso a dados de outro utilizador
         if (!authUser.equals(pathUser)) {
             return Response.status(Response.Status.FORBIDDEN)
                     .entity("{\"error\":\"Não pode aceder a dados alheios (403)\"}")
                     .build();
         }
 
-        return null; // Tudo OK
+        return null; //Tudo OK
     }
 
 

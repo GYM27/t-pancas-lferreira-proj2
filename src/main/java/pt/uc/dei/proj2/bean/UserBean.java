@@ -21,10 +21,11 @@ public class UserBean implements Serializable {
     public void init() {
         this.database = dao.loadDatabase();
 
+        //Debug para perceber se os utilizadores estão a ser carregados do ficheiro json
         System.out.println("DEBUG INIT - USERS CARREGADOS: "
                 + (database.getUsers() == null ? "null" : database.getUsers().size()));
 
-        // Garante que a lista existe mesmo que o JSON esteja vazio
+        //Garante que a lista existe mesmo que o JSON esteja vazio
         if (this.database.getUsers() == null) {
             this.database.setUsers(new ArrayList<>());
         }
@@ -34,7 +35,7 @@ public class UserBean implements Serializable {
     public boolean register(UserPojo newUser) {
         if (newUser == null || newUser.getUsername() == null) return false;
 
-        // Verifica duplicados na lista do database
+        //Verifica duplicados na lista do database
         for (UserPojo user : database.getUsers()) {
             if (user.getUsername().equalsIgnoreCase(newUser.getUsername())) return false;
         }
@@ -48,20 +49,19 @@ public class UserBean implements Serializable {
     }
 
     public boolean login(String username, String password) {
-        // 1. Verificação básica de segurança
+        // 1. Verificação de segurança
         if (username == null || password == null || database.getUsers() == null) {
             return false;
         }
 
-        // 2. O teu ciclo FOR tradicional (compatível com o que sabes)
         for (UserPojo u : database.getUsers()) {
             if (u.getUsername().equalsIgnoreCase(username) &&
                     u.getPassword().equals(password)) {
-                return true; // Encontrou e a password bate certo!
+                return true; //Encontrou e a password bate certo
             }
         }
 
-        return false; // Não encontrou ninguém com essas credenciais
+        return false; //Não encontrou ninguém com essas credenciais
     }
 
     public UserPojo getUserByUsername(String username) {
@@ -78,24 +78,26 @@ public class UserBean implements Serializable {
     }
 
     public boolean updateUser(String username, UserPojo updatedData) {
+
         for (UserPojo u : database.getUsers()) {
             if (u.getUsername().equalsIgnoreCase(username)) {
 
+                //Debug para perceber se a foto recebida é a correspondente à carregada
                 System.out.println("DEBUG PHOTO RECEBIDA: " + updatedData.getPhoto());
 
-                // Atualizamos os campos que o POJO possui
+                //Atualizamos os campos que o POJO possui
                 u.setFirstName(updatedData.getFirstName());
                 u.setLastName(updatedData.getLastName());
                 u.setEmail(updatedData.getEmail());
                 u.setCellphone(updatedData.getCellphone());
-                u.setPhoto(updatedData.getPhoto()); // URL da fotografia
+                u.setPhoto(updatedData.getPhoto()); //URL da fotografia
 
-                // Atualiza a password se ela for enviada
+                //Atualiza a password se ela for enviada
                 if (updatedData.getPassword() != null && !updatedData.getPassword().isEmpty()) {
                     u.setPassword(updatedData.getPassword());
                 }
 
-                save(); // Persiste no ficheiro JSON
+                save(); //Persiste no ficheiro JSON
                 return true;
             }
         }
@@ -103,7 +105,7 @@ public class UserBean implements Serializable {
     }
 
     public boolean save() {
-        return dao.saveDatabase(this.database); // Delega a gravação ao DAO
+        return dao.saveDatabase(this.database); //Delega a gravação ao DAO
     }
 
 }

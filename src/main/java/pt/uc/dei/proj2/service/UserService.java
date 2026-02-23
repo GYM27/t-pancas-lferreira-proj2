@@ -20,7 +20,7 @@ import jakarta.ws.rs.*;
 public class UserService {
 
     @Inject
-    private UserBean userBean; // Isto liga as duas classes automaticamente
+    private UserBean userBean; //Isto liga as duas classes automaticamente
 
     @POST
     @Path("/register")
@@ -69,7 +69,7 @@ public class UserService {
             @HeaderParam("username") String authUser,
             @HeaderParam("password") String authPass) {
 
-        // 1. Validação de segurança
+        //1. Validação de segurança
         if (authUser == null || authPass == null ||
                 !userBean.login(authUser, authPass)) {
 
@@ -78,14 +78,14 @@ public class UserService {
                     .build();
         }
 
-        // 2. Garantir que só pode ver o próprio perfil
+        //2. Garantir que só pode ver o próprio perfil
         if (!authUser.equals(pathUser)) {
             return Response.status(Response.Status.FORBIDDEN)
                     .entity("{\"error\":\"Não pode aceder a outro perfil\"}")
                     .build();
         }
 
-        // 3. Buscar utilizador
+        //3. Buscar utilizador
         var user = userBean.getUserByUsername(pathUser);
 
         if (user == null) {

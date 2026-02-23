@@ -35,11 +35,11 @@ public class DatabaseDao implements Serializable {
     public DatabasePojo loadDatabase() {
         File file = new File(FILE_PATH);
         if (!file.exists()) {
-            return new DatabasePojo(); // Retorna uma base vazia se o ficheiro não existir
+            return new DatabasePojo(); //Retorna uma base vazia se o ficheiro não existir
         }
 
         try (FileReader reader = new FileReader(file)) {
-            // Desserializa o ficheiro inteiro para o objeto envelope
+            //Desserializa o ficheiro inteiro para o objeto envelope
             return jsonb.fromJson(reader, DatabasePojo.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,20 +54,21 @@ public class DatabaseDao implements Serializable {
      * @return true se a gravação for bem-sucedida, false caso ocorra um erro.
      */
     public boolean saveDatabase(DatabasePojo database) {
-        // Manter os prints ajuda no debug durante o desenvolvimento
+
+        //Debug para perceber se está a ser bem gravado e qual é o path a ser usado
         System.out.println("user.dir = " + System.getProperty("user.dir"));
         System.out.println("FILE_PATH = " + FILE_PATH);
 
         try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
             System.out.println("A guardar em: " + new File(FILE_PATH).getAbsolutePath());
 
-            // Converte o objeto e escreve no ficheiro
+            //Converte o objeto e escreve no ficheiro
             jsonb.toJson(database, fos);
 
-            return true; // Se chegou aqui sem erro, a gravação foi um sucesso
+            return true; //Se chegou aqui sem erro, a gravação correu bem
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Se entrar no catch, algo falhou (ex: falta de permissões ou disco cheio)
+            return false; //Se entrar no catch, algo falhou (por exemplo: falta de permissões ou disco cheio)
         }
     }
 }

@@ -23,7 +23,6 @@ public class ClientesDto {
     }
 
     // Getters e Setters necessários para a conversão JSON
-
     public String getOrganizacao() {
         return organizacao;
     }

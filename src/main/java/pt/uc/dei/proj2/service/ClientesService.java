@@ -21,27 +21,27 @@ public class ClientesService {
     @Inject
     private ClientesBean clientesBean;
 
-    // ESTE MÉTODO É FIXO E NÃO MUDA: Resolve os 401 e 403
+    //Este método resolve os erros 401 e 403
     private Response validateSecurity(String pathUser, String authUser, String authPass) {
-        // 1. Erro 401: Não enviou nada no Header
+        //1. Erro 401: Não enviou nada no Header
         if (authUser == null || authUser.trim().isEmpty() || authPass == null || authPass.trim().isEmpty()) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("{\"error\":\"Faltam credenciais (401)\"}").build();
         }
 
-        // 2. Erro 403: Credenciais erradas
+        //2. Erro 403: Credenciais erradas
         if (!userBean.login(authUser, authPass)) {
             return Response.status(Response.Status.FORBIDDEN)
                     .entity("{\"error\":\"Login inválido (403)\"}").build();
         }
 
-        // 3. Erro 403: Tentativa de mexer em dados de outro utilizador
+        //3. Erro 403: Tentativa de mexer em dados de outro utilizador
         if (!authUser.equals(pathUser)) {
             return Response.status(Response.Status.FORBIDDEN)
                     .entity("{\"error\":\"Não pode aceder a dados alheios (403)\"}").build();
         }
 
-        return null; // Tudo OK!
+        return null; //Tudo OK!
     }
 
     @GET
@@ -67,9 +67,9 @@ public class ClientesService {
                               ClientesPojo client) {
 
         Response check = validateSecurity(pathUser, authUser, authPass);
-        if (check != null) return check; // Se houver erro, para aqui e devolve 401 ou 403
+        if (check != null) return check; //Se houver erro, para aqui e devolve 401 ou 403
 
-        // Se passar, executa a lógica
+        //Se passar, executa a lógica
         if (clientesBean.addClients(pathUser, client)) {
             return Response.status(Response.Status.CREATED).entity("{Cliente adicionado com sucesso}").build();
         }
@@ -84,11 +84,11 @@ public class ClientesService {
                                @HeaderParam("password") String authPass,
                                ClientesPojo client) {
 
-        // 1. Validação de Segurança (401 ou 403)
+        //1. Validação de Segurança (401 ou 403)
         Response check = validateSecurity(pathUser, authUser, authPass);
         if (check != null) return check;
 
-        // 2. Lógica de Negócio
+        //2. Lógica de Negócio
         if (clientesBean.editClient(pathUser, client)) {
             return Response.ok("{Cliente atualizado com sucesso}").build();
         } else {
@@ -104,11 +104,11 @@ public class ClientesService {
                                  @HeaderParam("password") String authPass,
                                  @QueryParam("id") int clientId) {
 
-        // 1. Validação de Segurança (401 ou 403)
+        //1. Validação de Segurança (401 ou 403)
         Response check = validateSecurity(pathUser, authUser, authPass);
         if (check != null) return check;
 
-        // 2. Lógica de Negócio
+        //2. Lógica de Negócio
         if (clientesBean.removeClient(pathUser, clientId)) {
             return Response.ok("{Cliente removido com sucesso}").build();
         } else

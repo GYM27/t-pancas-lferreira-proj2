@@ -27,7 +27,6 @@ public class LeadsBean implements Serializable {
             return user.getLeads();
         }
 
-        //return List.of(); // evita NullPointerException mas nao deixa que a lista seja alterada depois
         return new ArrayList<>();
     }
 
@@ -35,11 +34,11 @@ public class LeadsBean implements Serializable {
      * Adiciona uma nova lead ao utilizador.
      */
     public boolean addLead(String username, LeadsPojo newLead) {
-        // 1. Procurar o utilizador
+        // 1. Procura o utilizador
         UserPojo user = userBean.getUserByUsername(username);
 
         if (user != null) {
-            // 2. CORREÇÃO CRÍTICA: Se a lista for nula (utilizador novo), inicializamos
+            // 2. Se a lista for nula (utilizador novo), inicializamos
             if (user.getLeads() == null) {
                 user.setLeads(new ArrayList<>());
             }

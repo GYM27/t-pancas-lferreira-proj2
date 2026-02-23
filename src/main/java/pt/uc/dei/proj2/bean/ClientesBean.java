@@ -2,7 +2,6 @@ package pt.uc.dei.proj2.bean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import pt.uc.dei.proj2.dao.DatabaseDao;
 import pt.uc.dei.proj2.pojo.ClientesPojo;
 
 import pt.uc.dei.proj2.pojo.UserPojo;
@@ -15,8 +14,6 @@ import java.util.List;
 public class ClientesBean implements Serializable {
 
 
-    @Inject
-    private DatabaseDao databaseDao;
     @Inject
     private UserBean userBean;
 

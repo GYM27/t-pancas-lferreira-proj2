@@ -12,7 +12,7 @@ import java.io.IOException;
 @Provider
 public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
-    // Trata o preflight (OPTIONS)
+    //Trata o preflight (OPTIONS)
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
@@ -28,27 +28,25 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
         }
     }
 
-    // Adiciona os headers CORS às respostas normais
+    //Adiciona os headers CORS às respostas normais
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
 
-        // Permite pedidos vindos da origem do seu Live Server
-       // responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
-        //responseContext.getHeaders().add("Access-Control-Allow-Origin", "http://127.0.0.1:5500" );
+        //Permite pedidos vindos da origem do Live Server
         responseContext.getHeaders().putSingle(
                 "Access-Control-Allow-Origin",
                 "*"
         );
 
-        // Autoriza as credenciais (necessário se usar cookies ou autenticação específica)
+        //Autoriza as credenciais (necessário se usarmos cookies ou autenticação específica)
         responseContext.getHeaders().putSingle("Access-Control-Allow-Credentials", "true");
 
-        // Autoriza os cabeçalhos personalizados que está a enviar no fetch (username, password, etc)
+        //Autoriza os cabeçalhos personalizados que está a enviar no fetch (username, password)
         responseContext.getHeaders().putSingle("Access-Control-Allow-Headers",
                 "origin, content-type, accept, authorization, username, password");
 
-        // Autoriza os métodos HTTP que a sua API utiliza
+        //Autoriza os métodos HTTP que a API utiliza
         responseContext.getHeaders().putSingle("Access-Control-Allow-Methods",
                 "GET, POST, PUT, DELETE, OPTIONS, HEAD");
     }

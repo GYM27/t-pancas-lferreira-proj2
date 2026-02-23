@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabasePojo {
-    // Esta variável "users" corresponde à lista no teu JSON
+    //Esta variável "users" corresponde à lista no JSON
     private List<UserPojo> users = new ArrayList<>();
 
     public List<UserPojo> getUsers() { return users; }
